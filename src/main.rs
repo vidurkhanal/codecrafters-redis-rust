@@ -17,13 +17,21 @@ fn main() {
             Ok(mut stream) => {
                 println!("accepted new connection");
                 let mut buf = [0; 5];
-                let n = stream.read(&mut buf).unwrap();
 
-                let command = String::from_utf8_lossy(&buf[0..n]);
+                loop {
+                    let n = stream.read(&mut buf).unwrap();
 
-                if command.starts_with("ping") {
-                    let mut res = "+pong\r\n".as_bytes();
-                    stream.write(&mut res).unwrap();
+                    if n == 0 {
+                        println!("Connection closed!!");
+                        break;
+                    }
+
+                    let command = String::from_utf8_lossy(&buf[0..n]);
+
+                    if command.starts_with("ping") {
+                        let mut res = "+pong\r\n".as_bytes();
+                        stream.write(&mut res).unwrap();
+                    }
                 }
             }
             Err(e) => {
