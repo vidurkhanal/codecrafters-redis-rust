@@ -16,9 +16,9 @@ fn main() {
         match stream {
             Ok(mut stream) => {
                 println!("accepted new connection");
-                let mut buf = [0; 5];
 
                 loop {
+                    let mut buf = [0; 5];
                     let n = stream.read(&mut buf).unwrap();
 
                     if n == 0 {
